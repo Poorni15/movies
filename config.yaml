@@ -1,0 +1,7 @@
+omdb:
+  api_key: 979be668
+
+pricing:
+  standard: 2.99
+  premium: 4.99
+  deluxe: 6.99

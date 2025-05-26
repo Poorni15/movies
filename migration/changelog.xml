@@ -12,6 +12,7 @@
             <column name="id" type="SERIAL">
                  <constraints primaryKey="true" nullable="false"/>
             </column>
+             <column name="imdb_code" type="TEXT"/>
             <column name="title" type="TEXT"/>
              <column name="description" type="TEXT">
             </column>

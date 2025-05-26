@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"movie/internal/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -8,7 +10,7 @@ type MoviesController struct {
 }
 
 type movieStore interface {
-	GetByName(movies *[]Movie)
+	GetByName(movies *[]models.Movie)
 }
 
 func NewMoviesController() *MoviesController {

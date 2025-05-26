@@ -1,6 +1,11 @@
 package models
 
+import (
+	"github.com/google/uuid"
+)
+
 type User struct {
-	name string
+	ID   uuid.UUID
+	Name string
 	cart *Cart
 }

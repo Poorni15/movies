@@ -29,6 +29,6 @@ func (movierepository *MovieRepository) FindByTitle(title string) (*models.Movie
 
 func (movieRepository *MovieRepository) Insert(movie *models.Movie) error {
 	_, err := movieRepository.DB.Exec(`INSERT INTO MOVIES (imdb_code,title,description,release_year,genre,rating)
-	VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT DO NOTHING`, movie.ImdbCode, movie.Title, movie.Description, movie.ReleaseYear, movie.Genre, movie.Rating)
+	VALUES ($1,$2,$3,$4,$5,$6)`, movie.ImdbCode, movie.Title, movie.Description, movie.ReleaseYear, movie.Genre, movie.Rating)
 	return err
 }

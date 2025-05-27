@@ -9,7 +9,7 @@
 
       <changeSet id="1" author="Poorni">
             <createTable tableName="movies">
-            <column name="id" type="SERIAL">
+            <column name="id" type="UUID">
                  <constraints primaryKey="true" nullable="false"/>
             </column>
              <column name="imdb_code" type="TEXT"/>
@@ -25,22 +25,36 @@
             </rollback>
     </changeSet>
      <changeSet id="2" author="Poorni">
-            <createTable tableName="carts">
-            <column name="id" type="SERIAL">
-                 <constraints primaryKey="true" nullable="false"/>
-            </column>
-             <rollback>
-                <dropTable tableName="carts"/>
-            </rollback>
-    </changeSet>
-    <changeSet id="3" author="Poorni">
             <createTable tableName="users">
-            <column name="id" type="SERIAL">
+            <column name="id" type="UUID">
                  <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
              <rollback>
                 <dropTable tableName="users"/>
             </rollback>
+    </changeSet>
+     <changeSet id="3" author="Poorni">
+            <createTable tableName="carts">
+            <column name="id" type="UUID">
+                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+               <constraints nullable=false/>
+            </column> 
+             <rollback>
+                <dropTable tableName="carts"/>
+            </rollback>
+    </changeSet>
+    <changeSet id="4" author="Poorni">
+            <createTable tableName="cart_items">
+                <column name="id" type="UUID">
+                    <constraints primaryKey="true" nullable=false/>
+                </column>
+                <column name="cart_id" type="UUID"/>
+                <column name="movie_id" type="UUID"/>
+            </createTable>
+             <addForeignKeyConstraint baseTableName="cart_items" baseColumnNames="cart_id" referencedTableName="carts" referencedColumnNames="id" constraintName="fk_cart_item_cart"/>
+             <addForeignKeyConstraint baseTableName="cart_items" baseColumnNames="movie_id" referencedTableName="movies" referencedColumnNames="id" constraintName="fk_cart_item_movie"/>
     </changeSet>
 </databaseChangeLog>

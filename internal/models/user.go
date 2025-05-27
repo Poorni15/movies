@@ -5,7 +5,6 @@ import (
 )
 
 type User struct {
-	ID   uuid.UUID
-	Name string
-	cart *Cart
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }

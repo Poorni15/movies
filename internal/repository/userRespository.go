@@ -23,3 +23,12 @@ func (userRepository *UserRepository) Create(name string) (*models.User, error) 
 	}
 	return &models.User{ID: id, Name: name}, nil
 }
+
+func (userRepository *UserRepository) GetByID(id uuid.UUID) (*models.User, error) {
+	var user models.User
+	err := userRepository.DB.QueryRow("SELECT id, name FROM users WHERE id=$1", id).Scan(&user.ID, &user.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

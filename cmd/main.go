@@ -20,14 +20,18 @@ func main() {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 	defer db.Close()
+	cartRepository := repository.NewCartRepository(db)
 	movieRepository := repository.NewMovieRepository(db)
 	movieService := service.NewMoviesService(movieRepository)
 	moviesController := handler.NewMoviesController(movieService)
-	userRepository := repository.NewUserRepository(db)
+	userRepository := repository.NewUserRepository(db, *cartRepository)
 	userController := handler.NewUserController(userRepository)
+	cartController := handler.NewCartController(cartRepository)
 	router.GET("/helloworld", moviesController.SendHello)
 	router.GET("/movies/search", moviesController.Search)
 	router.POST("/users", userController.Create)
+	router.GET("/carts/:user_id", cartController.ViewCart)
+	router.POST("/carts", cartController.AddToCart)
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}

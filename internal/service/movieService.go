@@ -6,10 +6,10 @@ import (
 )
 
 type MovieService struct {
-	MovieRepository repository.MovieRepository
+	MovieRepository *repository.MovieRepository
 }
 
-func NewMoviesController(repository repository.MovieRepository) *MovieService {
+func NewMoviesService(repository *repository.MovieRepository) *MovieService {
 	return &MovieService{MovieRepository: repository}
 }
 

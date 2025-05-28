@@ -8,10 +8,10 @@ import (
 )
 
 type MoviesController struct {
-	MovieService service.MovieService
+	MovieService *service.MovieService
 }
 
-func NewMoviesController(service service.MovieService) *MoviesController {
+func NewMoviesController(service *service.MovieService) *MoviesController {
 	return &MoviesController{MovieService: service}
 }
 
@@ -23,19 +23,8 @@ func (movieController *MoviesController) Search(c *gin.Context) {
 	imdbCode := c.Query("imdb_code")
 	title := c.Query("title")
 	movie, err := movieController.MovieService.Search(imdbCode, title)
-	if err == nil {
-		c.JSON(http.StatusOK, movie)
-		return
-	}
-	movie, err = service.FetchMovieFromOMDb(imdbCode)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found in OMDb or locally"})
-		return
-	}
-	err = movieController.MovieService.Insert(movie)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to store movie"})
-		return
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	}
 	c.JSON(http.StatusOK, movie)
 }

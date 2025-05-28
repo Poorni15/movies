@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"movie/internal/models"
 )
 
@@ -59,6 +60,7 @@ func (movierepository *MovieRepository) findByImdbCode(imdbCode string) (*models
 }
 
 func (movieRepository *MovieRepository) Insert(movie *models.Movie) error {
+	fmt.Printf("Url formed: %s\n", movie.ImdbCode)
 	_, err := movieRepository.DB.Exec(`INSERT INTO MOVIES (imdb_code,title,description,release_year,genre,rating)
 	VALUES ($1,$2,$3,$4,$5,$6)`, movie.ImdbCode, movie.Title, movie.Description, movie.ReleaseYear, movie.Genre, movie.Rating)
 	return err

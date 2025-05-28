@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"movie/internal/models"
 	"movie/internal/repository"
 )
@@ -14,6 +15,7 @@ func NewMoviesService(repository *repository.MovieRepository) *MovieService {
 }
 
 func (movieService *MovieService) Search(title, imdbCode string) (*models.Movie, error) {
+	fmt.Println("Inside movie service")
 	var movie *models.Movie
 	var err error
 	movie, err = movieService.MovieRepository.Search(title, imdbCode)
@@ -22,6 +24,7 @@ func (movieService *MovieService) Search(title, imdbCode string) (*models.Movie,
 	}
 	if imdbCode != "" || title != "" {
 		movie, err = FetchMovieFromOMDb(imdbCode, title)
+		fmt.Printf("response body: %#v\n", movie)
 		if err != nil {
 			return nil, err
 		}

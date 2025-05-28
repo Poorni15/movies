@@ -23,8 +23,11 @@ func main() {
 	movieRepository := repository.NewMovieRepository(db)
 	movieService := service.NewMoviesService(movieRepository)
 	moviesController := handler.NewMoviesController(movieService)
+	userRepository := repository.NewUserRepository(db)
+	userController := handler.NewUserController(userRepository)
 	router.GET("/helloworld", moviesController.SendHello)
 	router.GET("/movies/search", moviesController.Search)
+	router.POST("/users", userController.Create)
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}

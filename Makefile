@@ -3,3 +3,6 @@ run:
 
 migrate-update:
 	liquibase --changeLogFile=./migration/changelog.xml --url=jdbc:postgresql://localhost:5432/postgres --username=postgres --password=poorni1512 update
+
+clear-checksum:
+	liquibase --changeLogFile=migration/changelog.xml clearCheckSums --url=jdbc:postgresql://localhost:5432/postgres --username=postgres --password=poorni1512

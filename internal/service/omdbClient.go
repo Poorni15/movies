@@ -24,24 +24,29 @@ type OMDBResponse struct {
 const OMDB_API_KEY = "979be668"
 
 func FetchMovieFromOMDb(imdbCode, title string) (*models.Movie, error) {
+	fmt.Printf("imdb coed: %s\n", imdbCode)
+	fmt.Printf("title : %s\n", title)
 	var OMDBResponse OMDBResponse
 	baseURL := "http://www.omdbapi.com/"
+	fmt.Printf("base url: %s\n", baseURL)
 	params := url.Values{}
-	params.Add("apikey", OMDB_API_KEY)
-	params.Add("plot", "full")
 	if imdbCode != "" {
 		params.Add("i", imdbCode)
 	} else {
 		params.Add("t", title)
 	}
+	params.Add("apikey", OMDB_API_KEY)
 	endpoint := fmt.Sprintf("%s?%s", baseURL, params.Encode())
+	fmt.Printf("Url formed: %s\n", endpoint)
 	res, err := http.Get(endpoint)
+	fmt.Printf("response body: %#v\n", res.Body)
 	if err != nil {
 		return nil, err
 	}
 	if err := json.NewDecoder(res.Body).Decode(&OMDBResponse); err != nil || OMDBResponse.Response != "True" {
 		return nil, fmt.Errorf("OMDb error: %s", OMDBResponse.Error)
 	}
+	fmt.Printf("response body: %#v\n", OMDBResponse)
 	releaseYear := 0
 	fmt.Sscanf(OMDBResponse.Year, "%d", &releaseYear)
 	rating := 0

@@ -16,9 +16,40 @@ func NewMovieRepository(db *sql.DB) *MovieRepository {
 	return &MovieRepository{DB: db}
 }
 
-func (movierepository *MovieRepository) FindByTitle(title string) (*models.Movie, error) {
+func (movieRepository *MovieRepository) Search(title, imdbCode string) (*models.Movie, error) {
+
+	if title != "" {
+		movie, err := movieRepository.findByTitle(title)
+		if err != nil {
+			return nil, err
+		}
+		return movie, nil
+	}
+
+	if imdbCode != "" {
+		movie, err := movieRepository.findByImdbCode(imdbCode)
+		if err != nil {
+			return nil, err
+		}
+		return movie, nil
+	}
+	return nil, errors.New("either title or imdbCode must be provided")
+}
+
+func (movierepository *MovieRepository) findByTitle(title string) (*models.Movie, error) {
 	var movie models.Movie
 	err := movierepository.DB.QueryRow("SELECT * from movies WHERE title= $1", title).
+		Scan(&movie.Id, &movie.ImdbCode, &movie.Title, &movie.Description, &movie.ReleaseYear,
+			&movie.Genre, &movie.Rating)
+	if err != nil {
+		return nil, ErrNotFound
+	}
+	return &movie, nil
+}
+
+func (movierepository *MovieRepository) findByImdbCode(imdbCode string) (*models.Movie, error) {
+	var movie models.Movie
+	err := movierepository.DB.QueryRow("SELECT * from movies WHERE imdb_code= $1", imdbCode).
 		Scan(&movie.Id, &movie.ImdbCode, &movie.Title, &movie.Description, &movie.ReleaseYear,
 			&movie.Genre, &movie.Rating)
 	if err != nil {

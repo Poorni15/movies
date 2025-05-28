@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"movie/internal/models"
 	"net/http"
+	"net/url"
 
 	"github.com/google/uuid"
 )
@@ -22,10 +23,19 @@ type OMDBResponse struct {
 
 const OMDB_API_KEY = "979be668"
 
-func FetchMovieFromOMDb(imdbCode string) (*models.Movie, error) {
+func FetchMovieFromOMDb(imdbCode, title string) (*models.Movie, error) {
 	var OMDBResponse OMDBResponse
-	url := fmt.Sprintf("https://www.omdbapi.com/?i=%s&plot=full&apikey=%s", imdbCode, OMDB_API_KEY)
-	res, err := http.Get(url)
+	baseURL := "http://www.omdbapi.com/"
+	params := url.Values{}
+	params.Add("apikey", OMDB_API_KEY)
+	params.Add("plot", "full")
+	if imdbCode != "" {
+		params.Add("i", imdbCode)
+	} else {
+		params.Add("t", title)
+	}
+	endpoint := fmt.Sprintf("%s?%s", baseURL, params.Encode())
+	res, err := http.Get(endpoint)
 	if err != nil {
 		return nil, err
 	}

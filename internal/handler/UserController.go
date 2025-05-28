@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"movie/internal/models"
 	"movie/internal/repository"
 	"net/http"
@@ -22,7 +23,10 @@ func (u UserController) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	u.userRepository.Create(user.Name)
-	c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	fmt.Printf("response body: %#v\n", user)
+	cuser, err := u.userRepository.Create(user.Name)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	}
+	c.JSON(http.StatusOK, cuser)
 }

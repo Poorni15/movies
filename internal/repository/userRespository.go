@@ -8,11 +8,12 @@ import (
 )
 
 type UserRepository struct {
-	DB *sql.DB
+	DB             *sql.DB
+	CartRepository CartRepository
 }
 
-func NewUserRepository(db *sql.DB) *UserRepository {
-	return &UserRepository{DB: db}
+func NewUserRepository(db *sql.DB, cartRepository CartRepository) *UserRepository {
+	return &UserRepository{DB: db, CartRepository: cartRepository}
 }
 
 func (userRepository *UserRepository) Create(name string) (*models.User, error) {
@@ -21,6 +22,7 @@ func (userRepository *UserRepository) Create(name string) (*models.User, error) 
 	if err != nil {
 		return nil, err
 	}
+	userRepository.CartRepository.CreateCart(id)
 	return &models.User{ID: id, Name: name}, nil
 }
 

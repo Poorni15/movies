@@ -113,4 +113,33 @@
             <dropTable tableName="carts"/>
         </rollback>
     </changeSet>
+    <changeSet id="8" author="Poorni">
+         <addForeignKeyConstraint 
+                 baseTableName="carts"
+                 baseColumnNames="user_id"
+                constraintName="fk_carts_user"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="9" author="Poorni">
+        <addForeignKeyConstraint 
+            baseTableName="cart_items"
+            baseColumnNames="cart_id"
+            constraintName="fk_cart_items_cart"
+            referencedTableName="carts"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="10" author="Poorni">
+        <addForeignKeyConstraint 
+            baseTableName="cart_items"
+            baseColumnNames="movie_id"
+            constraintName="fk_cart_items_movie"
+            referencedTableName="movies"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+    </changeSet>
 </databaseChangeLog>

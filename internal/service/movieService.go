@@ -37,3 +37,7 @@ func (movieService *MovieService) Search(title, imdbCode string) (*models.Movie,
 
 	return nil, repository.ErrNotFound
 }
+
+func (movieService *MovieService) List() ([]models.Movie, error) {
+	return movieService.MovieRepository.GetAll()
+}

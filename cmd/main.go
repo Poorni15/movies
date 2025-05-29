@@ -29,6 +29,7 @@ func main() {
 	cartController := handler.NewCartController(cartRepository)
 	router.GET("/helloworld", moviesController.SendHello)
 	router.GET("/movies/search", moviesController.Search)
+	router.GET("/movies", moviesController.GetAllMovies)
 	router.POST("/users", userController.Create)
 	router.GET("/carts/:user_id", cartController.ViewCart)
 	router.POST("/carts", cartController.AddToCart)

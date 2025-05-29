@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"movie/internal/models"
+
+	"github.com/google/uuid"
 )
 
 var ErrNotFound = errors.New("movie not found")
@@ -64,4 +66,36 @@ func (movieRepository *MovieRepository) Insert(movie *models.Movie) error {
 	_, err := movieRepository.DB.Exec(`INSERT INTO MOVIES (imdb_code,title,description,release_year,genre,rating)
 	VALUES ($1,$2,$3,$4,$5,$6)`, movie.ImdbCode, movie.Title, movie.Description, movie.ReleaseYear, movie.Genre, movie.Rating)
 	return err
+}
+
+func (movieRepository *MovieRepository) GetAll() ([]models.Movie, error) {
+	query := `
+        SELECT id, imdb_code, title, description, release_year, genre, rating
+        FROM movies
+    `
+	rows, err := movieRepository.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var movies []models.Movie
+	for rows.Next() {
+		var m models.Movie
+		var idStr string
+		if err := rows.Scan(&idStr, &m.ImdbCode, &m.Title, &m.Description, &m.ReleaseYear, &m.Genre, &m.Rating); err != nil {
+			return nil, err
+		}
+		m.Id, err = uuid.Parse(idStr)
+		if err != nil {
+			return nil, err
+		}
+		movies = append(movies, m)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return movies, nil
 }

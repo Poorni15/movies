@@ -31,3 +31,11 @@ func (movieController *MoviesController) Search(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, movie)
 }
+func (movieController *MoviesController) GetAllMovies(c *gin.Context) {
+	movies, err := movieController.MovieService.List()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve movies"})
+		return
+	}
+	c.JSON(http.StatusOK, movies)
+}

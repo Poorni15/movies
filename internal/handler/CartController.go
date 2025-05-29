@@ -25,16 +25,22 @@ func (cc *CartController) ViewCart(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
+
 	cartID, err := cc.cartRepository.GetOrCreateCart(userID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve or create cart"})
 		return
 	}
+
+	fmt.Printf("Cart ID: %s\n", cartID)
+
 	movieTitles, err := cc.cartRepository.GetMoviesInCart(cartID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve movies in cart"})
 		return
 	}
+
+	fmt.Printf("Movies in cart: %v\n", movieTitles)
 
 	c.JSON(http.StatusOK, gin.H{
 		"cart_id": cartID,

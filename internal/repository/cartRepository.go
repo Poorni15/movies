@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -65,6 +66,7 @@ func (r *CartRepository) GetMoviesInCart(cartID uuid.UUID) ([]string, error) {
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+	fmt.Printf("Retrieved movie titles: %v\n", titles)
 
 	return titles, nil
 }
